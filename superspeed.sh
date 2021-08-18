@@ -37,6 +37,10 @@ checkpython() {
 	            if [ "${release}" == "centos" ]; then
 	            		yum update > /dev/null 2>&1
 	                    yum -y install python > /dev/null 2>&1
+	                    yum -y install python39 > /dev/null 2>&1
+	                    if  [ ! -e '/usr/bin/python' ]; then
+	                        ln -s /usr/bin/python3 /usr/bin/python
+	                    fi
 	                else
 	                	apt-get update > /dev/null 2>&1
 	                    apt-get -y install python > /dev/null 2>&1
@@ -71,10 +75,11 @@ checkwget() {
 	fi
 }
 
+
 checkspeedtest() {
 	if  [ ! -e './speedtest-cli/speedtest' ]; then
 		echo "正在安装 Speedtest-cli"
-		wget --no-check-certificate -qO speedtest.tgz https://bintray.com/ookla/download/download_file?file_path=ookla-speedtest-1.0.0-$(uname -m)-linux.tgz > /dev/null 2>&1
+		wget --no-check-certificate -qO speedtest.tgz https://install.speedtest.net/app/cli/ookla-speedtest-1.0.0-$(uname -m)-linux.tgz
 	fi
 	mkdir -p speedtest-cli && tar zxvf speedtest.tgz -C ./speedtest-cli/ > /dev/null 2>&1 && chmod a+rx ./speedtest-cli/speedtest
 }
@@ -108,9 +113,9 @@ speed_test(){
 
 preinfo() {
 	echo "———————————————————SuperSpeed 全面测速版——————————————————"
-	echo "       bash <(curl -Lso- https://git.io/superspeed)"
-	echo "       全部节点列表:  https://git.io/superspeedList"
-	echo "       节点更新: 2020/04/09  | 脚本更新: 2020/04/09"
+	echo "       bash <(curl -Lso- https://raw.githubusercontent.com/BlueSkyXN/SpeedTestCN/main/superspeed.sh)"
+	echo "       如果仍然异常，应该是SpeedTest初次授权问题"
+	echo "       请使用工具箱安装SpeedTest然后手动运行后YES授权"
 	echo "——————————————————————————————————————————————————————————"
 }
 
@@ -228,7 +233,7 @@ runtest() {
 		# speed_test '26656' '黑龙江哈尔滨' '移动'
 
 		end=$(date +%s)  
-		rm -rf speedtest*
+		##rm -rf speedtest*
 		echo "——————————————————————————————————————————————————————————"
 		time=$(( $end - $start ))
 		if [[ $time -gt 60 ]]; then
@@ -269,7 +274,7 @@ runtest() {
 		 speed_test '19076' '重庆' '电信'
 
 		end=$(date +%s)  
-		rm -rf speedtest*
+		##rm -rf speedtest*
 		echo "——————————————————————————————————————————————————————————"
 		time=$(( $end - $start ))
 		if [[ $time -gt 60 ]]; then
@@ -313,7 +318,7 @@ runtest() {
 		 speed_test '4863' '陕西西安' '联通'
 
 		end=$(date +%s)  
-		rm -rf speedtest*
+		###rm -rf speedtest*
 		echo "——————————————————————————————————————————————————————————"
 		time=$(( $end - $start ))
 		if [[ $time -gt 60 ]]; then
@@ -382,7 +387,7 @@ runtest() {
 		 speed_test '26656' '黑龙江哈尔滨' '移动'
 
 		end=$(date +%s)  
-		rm -rf speedtest*
+		####rm -rf speedtest*
 		echo "——————————————————————————————————————————————————————————"
 		time=$(( $end - $start ))
 		if [[ $time -gt 60 ]]; then
@@ -409,7 +414,6 @@ runall() {
 	preinfo;
 	selecttest;
 	runtest;
-	rm -rf speedtest*
 }
 
 runall
